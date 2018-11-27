@@ -6,21 +6,10 @@ require iocStats,ae5d083
 require autosave,5.9.0
 require recsync,1.3.0
 require caPutLog,3.6.0
+require ess,0.0.1
 
 # Environment variables
 epicsEnvSet("ENGINEER", "Wayne Lewis")
-
-# Set up IOC shell logging
-epicsEnvSet("EPICS_IOC_LOG_INET", "localhost")
-epicsEnvSet("EPICS_IOC_LOG_PORT", "7004")
-iocLogInit()
-
-# Start caput logging
-epicsEnvSet("EPICS_AS_PUT_LOG_PV", "$(IOC):caPutLatest")
-epicsEnvSet("LOG_INET", "localhost")
-epicsEnvSet("LOG_INET_PORT", "7011")
-epicsEnvSet("ACCESS_SECURITY_PATH_IOC", "$(caPutLog_DB)")
-epicsEnvSet("ACCESS_SECURITY_FILE_IOC", "default.asg")
 
 ## Paths
 epicsEnvSet(TOP, "$(E3_CMD_TOP)")
@@ -42,7 +31,21 @@ epicsEnvSet("PDU_IP", "10.4.0.121")
 epicsEnvSet("RACK", "VIP Chopper")
 epicsEnvSet("PDU", "PDU1")
 
-iocshLoad "$(caPutLog_DIR)/caPutLog.iocsh" ")
+# Set up IOC shell logging
+epicsEnvSet("LOG_INET", "localhost")
+epicsEnvSet("LOG_INET_PORT", "7004")
+iocshLoad "$(ess_DIR)/iocLog.iocsh" "LOG_INET=$(LOG_INET),LOG_INET_PORT=$(LOG_INET_PORT)")
+
+# Start caput logging
+epicsEnvSet("EPICS_AS_PUT_LOG_PV", "$(IOC):caPutLatest")
+epicsEnvSet("CAPUT_LOG_INET", "localhost")
+epicsEnvSet("CAPUT_LOG_INET_PORT", "7011")
+epicsEnvSet("ASG_PATH", "/home/waynelewis/git/e3/e3-ess/template")
+epicsEnvSet("ASG_FILE", "unrestricted_access.asg")
+
+
+iocshLoad "$(ess_DIR)/accessSecurityGroup.iocsh" "ASG_PATH=$(ASG_PATH),ASG_FILE=$(ASG_FILE)")
+iocshLoad "$(caPutLog_DIR)/caPutLog.iocsh" "LOG_INET=$(CAPUT_LOG_INET),LOG_INET_PORT=$(CAPUT_LOG_INET_PORT),OPTION=0")
 
 iocshLoad "$(IOCSTATS_CMD_TOP)/iocStats.cmd" "IOC=$(IOC):IocStats")
 
