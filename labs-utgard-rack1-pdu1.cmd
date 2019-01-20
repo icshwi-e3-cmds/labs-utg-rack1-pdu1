@@ -40,14 +40,14 @@ iocshLoad "$(ess_DIR)/iocLog.iocsh" "LOG_INET=$(LOG_INET),LOG_INET_PORT=$(LOG_IN
 epicsEnvSet("EPICS_AS_PUT_LOG_PV", "$(IOC):caPutLatest")
 epicsEnvSet("CAPUT_LOG_INET", "localhost")
 epicsEnvSet("CAPUT_LOG_INET_PORT", "7011")
-epicsEnvSet("ASG_PATH", "/home/waynelewis/git/e3/e3-ess/template")
+epicsEnvSet("ASG_PATH", "/epics/iocs/e3-ess/template")
 epicsEnvSet("ASG_FILE", "unrestricted_access.asg")
 
 
 iocshLoad "$(ess_DIR)/accessSecurityGroup.iocsh" "ASG_PATH=$(ASG_PATH),ASG_FILE=$(ASG_FILE)")
 iocshLoad "$(caPutLog_DIR)/caPutLog.iocsh" "LOG_INET=$(CAPUT_LOG_INET),LOG_INET_PORT=$(CAPUT_LOG_INET_PORT),OPTION=0")
 
-iocshLoad "$(IOCSTATS_CMD_TOP)/iocStats.cmd" "IOC=$(IOC):IocStats")
+#iocshLoad "$(IOCSTATS_CMD_TOP)/iocStats.cmd" "IOC=$(IOC):IocStats")
 
 iocshLoad "$(SNMP_CMD_TOP)/raritan-px3-5190r.cmd" "PDU_IP=$(PDU_IP),IOC=$(IOC),RACK=$(RACK),PDU=$(PDU)"
 
