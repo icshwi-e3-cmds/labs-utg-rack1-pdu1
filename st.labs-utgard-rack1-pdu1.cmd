@@ -14,11 +14,10 @@ epicsEnvSet("ENGINEER", "Wayne Lewis")
 ## Paths
 epicsEnvSet(TOP, "$(E3_CMD_TOP)")
 epicsEnvSet("AUTOSAVE_DIR", "/opt/nonvolatile_local")
-epicsEnvSet("IOCSTATS_CMD_TOP", "$(TOP)/../../e3-iocStats/cmds")
-epicsEnvSet("AUTOSAVE_CMD_TOP", "$(TOP)/../../e3-autosave/cmds")
-epicsEnvSet("SNMP_CMD_TOP", "$(TOP)/../../e3-snmp/cmds")
-epicsEnvSet("RECSYNC_CMD_TOP", "$(TOP)/../../e3-recsync/cmds")
-epicsEnvSet("RECSYNC_CMD_TOP", "$(TOP)/../../e3-recsync/cmds")
+epicsEnvSet("IOCSTATS_CMD_TOP", "$(TOP)/../../e3/e3-iocStats/cmds")
+epicsEnvSet("AUTOSAVE_CMD_TOP", "$(TOP)/../../e3/e3-autosave/cmds")
+epicsEnvSet("SNMP_CMD_TOP", "$(TOP)/../../e3/e3-snmp/cmds")
+epicsEnvSet("RECSYNC_CMD_TOP", "$(TOP)/../../e3/e3-recsync/cmds")
 
 ## Database macros
 #epicsEnvSet(SYS, "LabS-Utgard-VIP:")
@@ -36,15 +35,15 @@ epicsEnvSet("LOG_INET", "localhost")
 epicsEnvSet("LOG_INET_PORT", "7004")
 iocshLoad "$(ess_DIR)/iocLog.iocsh" "LOG_INET=$(LOG_INET),LOG_INET_PORT=$(LOG_INET_PORT)")
 
+# Set up access security
+epicsEnvSet("ASG_PATH", "/home/waynelewis/git/e3/e3-ess/template")
+epicsEnvSet("ASG_FILE", "unrestricted_access.asg")
+iocshLoad "$(ess_DIR)/accessSecurityGroup.iocsh" "ASG_PATH=$(ess_DIR),ASG_FILE=$(ASG_FILE)")
+
 # Start caput logging
 epicsEnvSet("EPICS_AS_PUT_LOG_PV", "$(IOC):caPutLatest")
 epicsEnvSet("CAPUT_LOG_INET", "localhost")
 epicsEnvSet("CAPUT_LOG_INET_PORT", "7011")
-epicsEnvSet("ASG_PATH", "/home/waynelewis/git/e3/e3-ess/template")
-epicsEnvSet("ASG_FILE", "unrestricted_access.asg")
-
-
-iocshLoad "$(ess_DIR)/accessSecurityGroup.iocsh" "ASG_PATH=$(ASG_PATH),ASG_FILE=$(ASG_FILE)")
 iocshLoad "$(caPutLog_DIR)/caPutLog.iocsh" "LOG_INET=$(CAPUT_LOG_INET),LOG_INET_PORT=$(CAPUT_LOG_INET_PORT),OPTION=0")
 
 iocshLoad "$(IOCSTATS_CMD_TOP)/iocStats.cmd" "IOC=$(IOC):IocStats")
