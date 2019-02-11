@@ -1,0 +1,27 @@
+[Unit]
+Description=IOC: %i
+ConditionHost=banana
+After=network-online.target
+Requires=network-online.target
+
+[Service]
+User=root
+Type=simple
+Environment=VAR_DIR=/var
+Environment=SITEAPP=/epics/iocs/cmds/labs-utg-rack1-pdu1
+Environment=EPICS_BASE_VER=7.0.1.1
+Environment=EPICS_REQUIRE_VER=3.0.4
+WorkingDirectory=${SITEAPP}
+ExecStart=/usr/bin/procServ \
+		-f \
+		-L ${VAR_DIR}/log/procServ/out-%i \
+		-i ^C^D \
+		-c ${VAR_DIR}/run/procServ/%i \
+		-n %i \
+		2009 \
+		/epics/base-${EPICS_BASE_VER}/require/${EPICS_REQUIRE_VER}/bin/iocsh.bash \
+		${SITEAPP}/st.%i.cmd
+
+[Install]
+WantedBy=multi-user.target
+
